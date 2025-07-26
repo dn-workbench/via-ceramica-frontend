@@ -4,9 +4,7 @@ import CollectionsGrid from "../components/ForCollectionsPage/CollectionsGrid";
 
 function extractVendor(description) {
   const match = description?.match(/от итальянской фабрики\s+([^\n\.]+)/i);
-  if (match) {
-    return match[1].trim().toUpperCase();
-  }
+  if (match) return match[1].trim().toUpperCase();
   return "Производитель не указан";
 }
 
@@ -27,7 +25,6 @@ export default function CollectionsPage() {
       }));
 
       setProducts(processed);
-
       const uniqueVendors = [...new Set(processed.map((p) => p.vendor))];
       setVendors(uniqueVendors);
       setSelectedFactory((prev) => prev || uniqueVendors[0]);
@@ -45,11 +42,15 @@ export default function CollectionsPage() {
       }
     }
 
-    fetch("https://via-ceramica-api.vercel.app/api/products")
-      .then((res) => res.json())
+    fetch("https://via-ceramica-api.vercel.app/api/products", {
+      cache: "no-store",
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error(`Ошибка загрузки: ${res.status}`);
+        return res.json();
+      })
       .then((data) => {
         const items = Array.isArray(data) ? data : data.products || [];
-
         const cachedString = localStorage.getItem("products");
         const isDifferent = JSON.stringify(items) !== cachedString;
 
@@ -57,31 +58,23 @@ export default function CollectionsPage() {
           localStorage.setItem("products", JSON.stringify(items));
           processProducts(items);
         }
-
         setError(null);
       })
       .catch((err) => {
         console.error("Ошибка при загрузке данных:", err);
         setError("Не удалось загрузить данные");
       })
-      .finally(() => {
-        setLoading(false);
-      });
+      .finally(() => setLoading(false));
   }, []);
 
-  if (loading) {
+  if (loading)
     return <div className="min-h-screen text-white/60 p-6">Загрузка...</div>;
-  }
-
-  if (error) {
+  if (error)
     return (
       <div className="min-h-screen text-red-500 text-center py-6">{error}</div>
     );
-  }
 
-  const filteredProducts = products.filter(
-    (product) => product.vendor === selectedFactory
-  );
+  const filteredProducts = products.filter((p) => p.vendor === selectedFactory);
 
   const collections = Array.from(
     new Map(

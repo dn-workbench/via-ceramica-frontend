@@ -12,7 +12,6 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Загружаем из localStorage при первом запуске
   useEffect(() => {
     const cached = localStorage.getItem("products");
 
@@ -22,24 +21,26 @@ const Home = () => {
         if (Array.isArray(data)) {
           setProducts(data);
           setFilteredProducts(data);
-          setLoading(false); // Отображаем сразу
+          setLoading(false);
         }
       } catch (e) {
         console.warn("Ошибка чтения из localStorage:", e);
       }
     }
 
-    // Далее обновляем в фоне
     const fetchProducts = async () => {
       try {
         const response = await axios.get(
-          "https://via-ceramica-api.vercel.app/api/products"
+          "https://via-ceramica-api.vercel.app/api/products",
+          {
+            headers: { "Cache-Control": "no-cache" },
+          }
         );
-        const data = response.data?.products || response.data || [];
+        const data = Array.isArray(response.data)
+          ? response.data
+          : response.data.products || [];
 
-        if (!Array.isArray(data)) {
-          throw new Error("Некорректный формат данных");
-        }
+        if (!Array.isArray(data)) throw new Error("Некорректный формат данных");
 
         const cachedString = localStorage.getItem("products");
         const isDifferent = JSON.stringify(data) !== cachedString;
@@ -50,7 +51,6 @@ const Home = () => {
           localStorage.setItem("products", JSON.stringify(data));
         }
 
-        // Если до этого не было кэша
         if (!cached) {
           setProducts(data);
           setFilteredProducts(data);
@@ -68,7 +68,6 @@ const Home = () => {
     fetchProducts();
   }, []);
 
-  // Поиск
   useEffect(() => {
     if (!Array.isArray(products)) return;
 
@@ -117,6 +116,7 @@ const Home = () => {
           </>
         )}
       </main>
+      <Footer />
     </div>
   );
 };

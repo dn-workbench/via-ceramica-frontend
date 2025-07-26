@@ -1,10 +1,17 @@
-useEffect(() => {
-  fetch("https://web-production-1c9e.up.railway.app/products")
-    .then((res) => res.json())
-    .then((data) => {
-      setProducts(data);
-      const uniqueVendors = [...new Set(data.map((p) => p.vendor))];
-      setVendors(uniqueVendors);
-      setSelectedVendor(uniqueVendors[0]);
-    });
-}, []);
+export async function fetchProducts() {
+  try {
+    const response = await fetch(
+      "https://via-ceramica-api.vercel.app/api/products",
+      {
+        cache: "no-store",
+      }
+    );
+    if (!response.ok) throw new Error(`Ошибка загрузки: ${response.status}`);
+    const data = await response.json();
+    const productsArray = Array.isArray(data) ? data : data.products || [];
+    return productsArray;
+  } catch (error) {
+    console.error("Ошибка при загрузке товаров:", error);
+    throw error;
+  }
+}
