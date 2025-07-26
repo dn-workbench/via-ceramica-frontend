@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "LotusEater";
+  src: url("/fonts/Lotuseater.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  background-color: rgba(15, 14, 14, 1);
+
+  margin: 0;
+  padding: 0;
+}
