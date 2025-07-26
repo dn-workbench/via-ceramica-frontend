@@ -33,7 +33,7 @@ const Home = () => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get(
-          "https://web-production-1c9e.up.railway.app/products"
+          "https://via-ceramica-api.vercel.app/api/products"
         );
         const data = response.data?.products || response.data || [];
 

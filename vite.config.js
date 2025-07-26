@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "https://web-production-1c9e.up.railway.app",
+        target: "https://via-ceramica-api.vercel.app/api/products",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
         secure: false,

@@ -45,7 +45,7 @@ export default function CollectionsPage() {
       }
     }
 
-    fetch("https://web-production-1c9e.up.railway.app/products")
+    fetch("https://via-ceramica-api.vercel.app/api/products")
       .then((res) => res.json())
       .then((data) => {
         const items = Array.isArray(data) ? data : data.products || [];

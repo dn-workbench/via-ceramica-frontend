@@ -13,7 +13,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://web-production-1c9e.up.railway.app/$1"
+      "destination": "https://via-ceramica-api.vercel.app/api/products"
     }
   ]
 }
