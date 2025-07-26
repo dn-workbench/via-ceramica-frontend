@@ -54,7 +54,9 @@ export default function ProductGrid({ products = [], loading }) {
 
       {/* Индикатор загрузки */}
       <div ref={loaderRef} className="py-10 text-center text-gray-400">
-        {visibleCount < sortedProducts.length ? "Загрузка..." : "Все загружено"}
+        {visibleCount < sortedProducts.length
+          ? "Загрузка..."
+          : "Все загружено1"}
       </div>
     </div>
   );
