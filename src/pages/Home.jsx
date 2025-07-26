@@ -32,7 +32,9 @@ const Home = () => {
     // Далее обновляем в фоне
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("/api/products");
+        const response = await axios.get(
+          "https://web-production-1c9e.up.railway.app/products"
+        );
         const data = response.data?.products || response.data || [];
 
         if (!Array.isArray(data)) {

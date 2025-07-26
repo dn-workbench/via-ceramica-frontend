@@ -45,7 +45,7 @@ export default function CollectionsPage() {
       }
     }
 
-    fetch("/api/products")
+    fetch("https://web-production-1c9e.up.railway.app/products")
       .then((res) => res.json())
       .then((data) => {
         const items = Array.isArray(data) ? data : data.products || [];
